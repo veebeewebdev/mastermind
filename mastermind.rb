@@ -1,6 +1,7 @@
 class Mastermind
   def initialize
-    
+    @matched_colors = []
+    @computer_pick = []
     @colors = %w[red orange yellow green blue violet]
   end
 
@@ -24,12 +25,22 @@ class Mastermind
   end
 
   def computer_picks
-    @computer_pick = []
-    4.times do
-      @choice = @colors.sample(1)
-      @computer_pick.push(@choice[0])
+    if @matched_colors == []
+      @computer_pick = []
+      4.times do
+        @choice = @colors.sample(1)
+        @computer_pick.push(@choice[0])
+      end
+    elsif @matched_colors != []
+      @computer_pick = @matched_colors
+      @remaining_picks = 4 - @computer_pick.length
+      @remaining_picks.times do
+        @choice = @colors.sample(1)
+        @computer_pick.push(@choice[0])
+      end
     end
-    print "Computer picks: #{@computer_pick}\n"
+    return @computer_pick.shuffle
+    # print "Computer picks: #{@computer_pick}\n"
   end
 
   def player_picks
@@ -47,15 +58,13 @@ class Mastermind
     @player_pick
   end
 
-  def computer_guess
-    print "matched colors: #{@matched_colors}"
-#next guess must include @matched_colors, randomly ordered; also get length and select 4 - @matched_colors.length new random picks from @colors 
-end
+#   def computer_guess
+#     print "\nmatched colors: #{@matched_colors}\n"
+    # next guess must include @matched_colors, randomly ordered; also get length and select 4 - @matched_colors.length new random picks from @colors
+#   end
 
   def winner
-    if @match_found == 4
-      true
-    end
+    true if @match_found == 4
   end
 
   def check_solution
@@ -76,22 +85,20 @@ end
           @matched_colors.push(x[0]) # this holds all names of colors matched, either perfect or imperfect
           @index_to_delete.push(index)
           @match_found += 1
-
         end
-        #   print "winner != true yet"
       end
 
       print "\nPerfect matches found: #{@match_found}\n"
       if winner == true
         print "\nAll four matched!\n"
-        
+
       else
 
         @index_to_delete.reverse.each do |each|
           @combined_array.delete_at(each)
         end
 
-        # print "\n#{@combined_array}" # [player choice, computer choice]
+        #@combined_array [player choice, computer choice]
 
         @combined_array.each do |each|
           @unmatched_player_guesses.push(each[0])
@@ -112,26 +119,27 @@ end
   end
 
   def play
-    rounds = 0
+    @rounds = 0
     if who_picks == 'n'
 
-      until winner || rounds == 12
+      until winner || @rounds == 12
+        @rounds += 1
+        print "\nRound: #{@rounds}\n"
         print "\nYou picked #{player_picks}\n"
         check_solution
-        rounds += 1
+      end
+      if @rounds == 12 
+        print "\nComputer wins! Computer pick was #{@computer_pick}\n"
       end
     else
       print "\nNow the computer will guess.\n"
-    #   computer_picks
-      until winner || rounds == 12
+      until winner || @rounds == 12
+        @rounds += 1
+        print "\nRound: #{@rounds}\n"
         print "\nComputer picked #{computer_picks}\n"
         check_solution
-        computer_guess
-        rounds += 1
-      end      
-      # do computer guesses:
-      # store correct colors and make computer include them in subsequent guesses
-      # pick them in random order for the next guess along with new random colors to make four total colors then guess again
+        # computer_guess
+      end
     end
   end
 end
