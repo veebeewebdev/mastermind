@@ -93,11 +93,12 @@ end
 end
 
   def play
-    rounds=0
+    rounds = 0
     who_picks
         until winner || rounds == 12
         solution_attempt
         check_solution
+        rounds += 1
       end
 
   end
