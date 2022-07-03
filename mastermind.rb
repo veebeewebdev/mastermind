@@ -29,9 +29,22 @@ end
   end
 
   def solution_attempt
+    @player_solution = []
+    #MAKE IT SO YOU HAVE TO PICK FOUR!!!
+
+    until @player_solution.length == 4
     puts "Choose four separated by spaces: red, orange, yellow, green, blue, violet; duplicates are okay!\n"
     @player_solution = gets.chomp.split(' ')
-    print "You picked #{@player_solution}\n"
+    
+    
+
+        print "You picked #{@player_solution}\n"
+        
+        if @player_solution.length != 4
+            print "You have to pick exactly four!\n"
+        end
+    end
+
   end
 
   def winner
@@ -59,7 +72,7 @@ end
         @match_found += 1
 
       end
-      print "winner != true yet"
+    #   print "winner != true yet"
     end
 
     print "Perfect matches found: #{@match_found}\n"
@@ -86,7 +99,7 @@ end
       @imperfect_match_found += 1
     end
 
-    print "\nColors correct with wrong location: #{@imperfect_match_found}"
+    print "\nColors correct with wrong location: #{@imperfect_match_found}\n"
 end
   end
 
